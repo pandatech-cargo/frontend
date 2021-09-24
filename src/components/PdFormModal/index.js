@@ -8,8 +8,6 @@ import cs from 'classnames';
 
 import styles from './style.module.scss';
 
-const { Option } = Select;
-
 const formMock = [
   {
     type: 'textfield',
