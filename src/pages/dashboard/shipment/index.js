@@ -161,7 +161,14 @@ export function Shipment() {
                 <RangePicker />
               </Form.Item>
               <Form.Item className="pd-align-center">
-                <PdButton type="primary" htmlType="submit">
+                <PdButton
+                  className="pd-margin-right-md"
+                  onClick={handleCloseModal}
+                  ghost
+                  type="primary">
+                  Cancel
+                </PdButton>
+                <PdButton htmlType="submit" type="primary">
                   Submit
                 </PdButton>
               </Form.Item>
