@@ -9,3 +9,4 @@ export { PdHeader } from './PdHeader';
 export { PdPageSpinner } from './PdPageSpinner';
 export { PdSidebar } from './PdSidebar';
 export { PdFormModal } from './PdFormModal';
+export { PdNavbar } from './PdNavbar';

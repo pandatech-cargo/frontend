@@ -1,5 +1,6 @@
 import { Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import { PdNavbar } from 'components';
 
 export function AuthenticatedGuardRoute(props) {
   const { component: WrapperComponent, path, ...rest } = props;
@@ -28,7 +29,10 @@ export function TransporterGuardRoute(props) {
       {...rest}
       render={(props) => {
         return localStorage.getItem('role') === 'transporter' ? (
-          <WrapperComponent {...props} />
+          <>
+            <PdNavbar />
+            <WrapperComponent {...props} />
+          </>
         ) : (
           <Redirect to="/login" />
         );
