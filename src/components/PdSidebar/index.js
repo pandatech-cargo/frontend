@@ -53,6 +53,7 @@ export function PdSidebar() {
     if (cms_token) {
       localStorage.removeItem('cms_token');
       localStorage.removeItem('current_admin');
+      localStorage.removeItem('role');
     }
   }
 

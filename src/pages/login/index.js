@@ -1,4 +1,4 @@
-import { Form, Layout, Radio, Row } from 'antd';
+import { Form, Layout, Radio, Row, Space } from 'antd';
 
 import logo from 'assets/kargo-logo-dark.png';
 import { PdButton } from 'components';
@@ -12,6 +12,14 @@ const { Content } = Layout;
 
 export function Login({ history }) {
   
+  const formItemLayout = {
+    labelCol: { span: 8 },
+    wrapperCol: { span: 14 },
+  }
+
+  const buttonItemLayout = {
+    wrapperCol: { span: 24 },
+  }
 
   function handleLogin({role}) {
     localStorage.setItem("role", role);
@@ -53,7 +61,9 @@ export function Login({ history }) {
       </Row>
       <Row type="flex" align="middle" justify="center">
         <Form
+          {...formItemLayout}
           className="login-form"
+          // layout="vertical"
           name="login-form"
           onFinish={handleLogin}
           onFinishFailed={handleOnFinishFailed}
@@ -62,12 +72,14 @@ export function Login({ history }) {
             label="Role"
             name="role">
             <Radio.Group>
-              {ROLES.map(({role, label}) => (
-                <Radio key={role} value={role} name="role">{label}</Radio>
-              ))}
+              <Space direction="vertical">
+                {ROLES.map(({role, label}) => (
+                  <Radio key={role} value={role} name="role">{label}</Radio>
+                ))}
+              </Space>
             </Radio.Group>
           </Form.Item>
-          <Form.Item className="pd-align-center">
+          <Form.Item className="pd-align-center" {...buttonItemLayout}>
             <PdButton type="primary" htmlType="submit">
               Log In
             </PdButton>
