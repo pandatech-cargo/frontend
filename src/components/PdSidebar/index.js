@@ -11,22 +11,7 @@ const { Sider } = Layout;
 const { SubMenu, Item } = Menu;
 const { Title } = Typography;
 
-const menuOptions = [
-  {
-    type: 'SubMenu',
-    name: 'Examples',
-    children: [
-      // TODO: probably better to store the pathname in a constant so it sync better with the routers
-      {
-        type: 'Menu',
-        name: 'Form Submission',
-        link: '/examples/form-submission',
-      },
-      { type: 'Menu', name: 'Drag and drop table', link: '/examples/dnd' },
-    ],
-  },
-  { type: 'Menu', name: 'Shipment', link: '/shipment' },
-];
+const menuOptions = [{ type: 'Menu', name: 'Shipment', link: '/shipment' }];
 
 function renderMenu(opt, parent = '') {
   const { name = '', link = '', type = 'Menu', children = [] } = opt;

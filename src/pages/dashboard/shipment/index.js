@@ -18,10 +18,12 @@ import { DownOutlined } from '@ant-design/icons';
 
 import { PdButton, PdFormModal, PdHeader } from 'components';
 
+import CityApi from 'api/city';
+import ShipmentApi from 'api/shipment';
+
 import { DATE_FORMAT, errHandler } from 'utils';
 
 import './style.scss';
-import CityApi from 'api/city';
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -31,6 +33,8 @@ const { RangePicker } = DatePicker;
 
 export function Shipment() {
   const [cityList, setCityList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [shipmentList, setShipmentList] = useState([]);
   const [shipmentForm] = Form.useForm();
   const [assignForm] = Form.useForm();
 
@@ -120,9 +124,28 @@ export function Shipment() {
     setShowModalShipment(false);
   }
 
-  function handleSubmitShipment(values) {
-    //   write code here
-    console.log({ values });
+  async function fetchShipments() {
+    setLoading(true);
+    try {
+      const {
+        data: { data = [] },
+      } = await ShipmentApi.getShipmentList();
+      setShipmentList(data);
+    } catch (error) {
+      errHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSubmitShipment(values) {
+    try {
+      await ShipmentApi.createShipment({ shipment: values });
+      fetchShipments();
+      handleCloseModal();
+    } catch (error) {
+      errHandler(error);
+    }
   }
 
   function handleSubmitAssign(values) {
@@ -141,6 +164,7 @@ export function Shipment() {
 
   useEffect(() => {
     fetchCities();
+    fetchShipments();
   }, []);
 
   return (
