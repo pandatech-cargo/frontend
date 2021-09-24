@@ -25,6 +25,7 @@ const menuOptions = [
       { type: 'Menu', name: 'Drag and drop table', link: '/examples/dnd' },
     ],
   },
+  { type: 'Menu', name: 'Shipment', link: '/shipment' },
 ];
 
 function renderMenu(opt, parent = '') {
