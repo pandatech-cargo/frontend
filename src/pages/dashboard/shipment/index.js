@@ -1,20 +1,27 @@
 /* eslint-disable no-unused-vars */
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import {
   Col,
   DatePicker,
+  Dropdown,
   Form,
   Input,
   Layout,
-  Modal,
+  Menu,
   Row,
   Select,
   Table,
   Typography,
 } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
 
-import { PdButton, PdHeader } from 'components';
+import { PdButton, PdFormModal, PdHeader } from 'components';
+
+import CityApi from 'api/city';
+import ShipmentApi from 'api/shipment';
+
+import { DATE_FORMAT, errHandler } from 'utils';
 
 import './style.scss';
 
@@ -25,16 +32,33 @@ const { Title } = Typography;
 const { RangePicker } = DatePicker;
 
 export function Shipment() {
+  const [cityList, setCityList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [shipmentList, setShipmentList] = useState([]);
+  const [shipmentForm] = Form.useForm();
+  const [assignForm] = Form.useForm();
+
+  const [showModalShipment, setShowModalShipment] = useState(false);
+  const [showModalAssign, setShowModalAssign] = useState(false);
+
   const formItemLayout = {
-    labelCol: { span: 8, offset: 2 },
-    wrapperCol: { span: 15 },
+    labelCol: { span: 8 },
+    wrapperCol: { span: 16 },
   };
-  const [showModal, setShowModal] = useState(false);
+
+  const menu = () => (
+    <Menu onClick={handleAction}>
+      <Menu.Item key="allocate_shipment">Allocate Shipment</Menu.Item>
+      <Menu.Item key="update_status">Update Status</Menu.Item>
+    </Menu>
+  );
+
   const Action = () => (
-    <Select placeholder="Select Action">
-      <Option value="allocate_shipment">Allocate Shipment</Option>
-      <Option value="update_status">Update Status</Option>
-    </Select>
+    <Dropdown overlay={menu} trigger={['click']}>
+      <PdButton ghost type="primary">
+        Action <DownOutlined />
+      </PdButton>
+    </Dropdown>
   );
 
   const dataSource = [
@@ -45,6 +69,7 @@ export function Shipment() {
       origin: 'Jakarta',
       shipment: 'DO-111',
       status: 'completed',
+      license: 'B 11111 C',
     },
   ];
   const column = [
@@ -52,6 +77,11 @@ export function Shipment() {
       key: '',
       title: 'Shipment',
       dataIndex: 'shipment',
+    },
+    {
+      key: '',
+      title: 'License',
+      dataIndex: 'license',
     },
     {
       key: '',
@@ -85,13 +115,57 @@ export function Shipment() {
     },
   ];
 
-  function handleCloseModal() {
-    setShowModal(false);
+  function handleAction({ key } = {}) {
+    if (key === 'allocate_shipment') setShowModalAssign(true);
   }
 
-  function handleSubmit(values) {
-    //   write code here
+  function handleCloseModal() {
+    setShowModalAssign(false);
+    setShowModalShipment(false);
   }
+
+  async function fetchShipments() {
+    setLoading(true);
+    try {
+      const {
+        data: { data = [] },
+      } = await ShipmentApi.getShipmentList();
+      setShipmentList(data);
+    } catch (error) {
+      errHandler(error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSubmitShipment(values) {
+    try {
+      await ShipmentApi.createShipment({ shipment: values });
+      fetchShipments();
+      handleCloseModal();
+    } catch (error) {
+      errHandler(error);
+    }
+  }
+
+  function handleSubmitAssign(values) {
+    //   write code here
+    console.log({ values });
+  }
+
+  async function fetchCities() {
+    try {
+      const { data } = await CityApi.getCityList();
+      console.log({ data });
+    } catch (error) {
+      errHandler(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchCities();
+    fetchShipments();
+  }, []);
 
   return (
     <Layout className="pd-cms-shipment">
@@ -119,7 +193,7 @@ export function Shipment() {
             <PdButton
               type="primary"
               full
-              onClick={setShowModal.bind(this, true)}>
+              onClick={setShowModalShipment.bind(this, true)}>
               Add Shipment
             </PdButton>
           </Col>
@@ -133,41 +207,81 @@ export function Shipment() {
         </Row>
       </Content>
 
-      {/* Modal Section */}
-      {showModal && (
-        <Modal visible={showModal} onCancel={handleCloseModal} footer={null}>
+      {/* Modal Shipment Section */}
+      {showModalShipment && (
+        <PdFormModal
+          onCancel={handleCloseModal}
+          onOk={shipmentForm.submit}
+          open={showModalShipment}
+          title="Add Shipment"
+          form={shipmentForm}>
           <Row type="flex" justify="center">
-            <Title level={4}>Add Shipment</Title>
-          </Row>
-          <Row className="pd-margin-top-lg" type="flex" justify="center">
-            <Form onFinish={handleSubmit}>
-              <Form.Item label="Origin" name="origin" {...formItemLayout}>
-                <Select placeholder="Select origin">
-                  <Option value={1}>value 1</Option>
+            <Form form={shipmentForm} onFinish={handleSubmitShipment}>
+              <Form.Item
+                label="Origin"
+                name="origin"
+                {...formItemLayout}
+                rules={[
+                  { required: true, message: 'Please choose the origin' },
+                ]}>
+                <Select showSearch placeholder="Select origin">
+                  {cityList.map(({ id, value, title } = {}) => (
+                    <Option key={id} value={value}>
+                      {title}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
               <Form.Item
                 label="Destination"
                 name="destination"
+                rules={[
+                  { required: true, message: 'Please choose the destination' },
+                ]}
                 {...formItemLayout}>
-                <Select placeholder="Select destinationn">
-                  <Option value={10}>value 10</Option>
+                <Select showSearch placeholder="Select destination">
+                  {cityList.map(({ id, value, title } = {}) => (
+                    <Option key={id} value={value}>
+                      {title}
+                    </Option>
+                  ))}
                 </Select>
               </Form.Item>
               <Form.Item
                 label="Loading Date"
                 name="loading_date"
+                rules={[
+                  { required: true, message: 'Please choose the loading date' },
+                ]}
                 {...formItemLayout}>
-                <RangePicker />
-              </Form.Item>
-              <Form.Item className="pd-align-center">
-                <PdButton type="primary" htmlType="submit">
-                  Submit
-                </PdButton>
+                <RangePicker format={DATE_FORMAT} />
               </Form.Item>
             </Form>
           </Row>
-        </Modal>
+        </PdFormModal>
+      )}
+
+      {/* Modal Assign Section */}
+      {showModalAssign && (
+        <PdFormModal
+          form={shipmentForm}
+          onCancel={handleCloseModal}
+          onOk={assignForm.submit}
+          title="Assign Shipment"
+          visible={showModalAssign}>
+          <Row type="flex" justify="center">
+            <Form form={assignForm} onFinish={handleSubmitAssign}>
+              <Form.Item
+                label="Transporter"
+                name="transporter"
+                {...formItemLayout}>
+                <Select showSearch placeholder="Select transporter">
+                  <Option value={1}>value 1</Option>
+                </Select>
+              </Form.Item>
+            </Form>
+          </Row>
+        </PdFormModal>
       )}
     </Layout>
   );
