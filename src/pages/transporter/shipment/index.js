@@ -20,7 +20,7 @@ import { DownOutlined } from '@ant-design/icons';
 
 import { PdButton } from 'components';
 
-import './style.scss';
+// import './style.scss';
 
 const { Option } = Select;
 const { Search } = Input;
