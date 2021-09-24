@@ -16,7 +16,7 @@ import {
 } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
-import { PdButton, PdFormModal, PdHeader } from 'components';
+import { PdButton, PdFormModal, PdHeader, PdNavbar } from 'components';
 
 import CityApi from 'api/city';
 import ShipmentApi from 'api/shipment';
@@ -179,6 +179,7 @@ export function Shipment() {
           </Title>
         }
       />
+      <PdNavbar />
       <Content className="pd-cms-shipment-content">
         {/* Filter Section */}
         <Row>

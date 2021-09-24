@@ -11,38 +11,37 @@ import './style.scss';
 const { Content } = Layout;
 
 export function Login({ history }) {
-  
   const formItemLayout = {
     labelCol: { span: 8 },
     wrapperCol: { span: 14 },
-  }
+  };
 
   const buttonItemLayout = {
     wrapperCol: { span: 24 },
-  }
+  };
 
-  function handleLogin({role}) {
-    localStorage.setItem("role", role);
-    localStorage.setItem("cms_token", '123');
-    history.push('/');
+  function handleLogin({ role }) {
+    localStorage.setItem('role', role);
+    if (role === 'transporter') history.push('/transporter');
+    else if (role === 'shipment') history.push('/shipment');
   }
 
   function handleOnFinishFailed(errorInfo) {
-    errHandler({}, errorInfo)
+    errHandler({}, errorInfo);
   }
 
   const ROLES = useMemo(() => {
     return [
       {
         role: 'transporter',
-        label: 'Transporter'
+        label: 'Transporter',
       },
       {
         role: 'shipper',
-        label: 'Shipper'
-      }
-    ]
-  }, [])
+        label: 'Shipper',
+      },
+    ];
+  }, []);
 
   return (
     <Content className="pd-login">
@@ -66,15 +65,14 @@ export function Login({ history }) {
           // layout="vertical"
           name="login-form"
           onFinish={handleLogin}
-          onFinishFailed={handleOnFinishFailed}
-          >
-          <Form.Item
-            label="Role"
-            name="role">
+          onFinishFailed={handleOnFinishFailed}>
+          <Form.Item label="Role" name="role">
             <Radio.Group>
               <Space direction="vertical">
-                {ROLES.map(({role, label}) => (
-                  <Radio key={role} value={role} name="role">{label}</Radio>
+                {ROLES.map(({ role, label }) => (
+                  <Radio key={role} value={role} name="role">
+                    {label}
+                  </Radio>
                 ))}
               </Space>
             </Radio.Group>
