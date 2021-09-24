@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 
 import { MainProvider } from 'contexts';
 
-import { DragAndDrop, FormSubmission, Home, Login } from 'pages';
+import { DragAndDrop, FormSubmission, Home, Login, Shipment } from 'pages';
 
 import {
   AuthenticatedGuardRoute,
@@ -18,6 +18,7 @@ import 'App.scss';
 // Page Management
 const authRoutesList = [
   { path: '/', component: Home, exact: true },
+  { path: '/shipment', component: Shipment, exact: true },
   { path: '/examples/form-submission', component: FormSubmission, exact: true },
   { path: '/examples/dnd', component: DragAndDrop, exact: true },
 ];
