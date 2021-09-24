@@ -1,5 +1,7 @@
 import { message } from 'antd';
 
+export { DATE_FORMAT, FORM_MOCK } from './constants';
+
 /**
  *
  * @param {Object} errorBE - error message from BE
