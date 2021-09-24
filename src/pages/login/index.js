@@ -37,8 +37,8 @@ export function Login({ history }) {
         label: 'Transporter',
       },
       {
-        role: 'shipper',
-        label: 'Shipper',
+        role: 'shipment',
+        label: 'Shipment',
       },
     ];
   }, []);
