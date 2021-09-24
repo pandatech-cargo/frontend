@@ -1,39 +1,43 @@
 import { Row, Col } from 'antd';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-const mockData = {
-  id: 1,
-  license: 'D 1234 ABC',
-  truck: 'Semi',
-  plate: 'Black',
-  year: '2021',
-  status: 'active',
-};
+import Transporter from 'api/transporter';
 
 export function TruckDetail() {
+  const [data, setData] = useState({});
   const { id } = useParams();
+
+  useEffect(() => {
+    async function dispatch(id) {
+      const { data } = await Transporter.getTruck(id);
+      console.log(data);
+      setData(data.data);
+    }
+    dispatch(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
       <Row justify="center">
         <Col span={20}>
-          {id}
           <Row justify="space-between">
             <Col span={11}>
               <Row>
-                <Col>License Plate: {mockData.license}</Col>
+                <Col>License Plate: {data?.license_number}</Col>
               </Row>
               <Row>
-                <Col>Truck Type: {mockData.truck}</Col>
+                <Col>Truck Type: {data?.truck_type}</Col>
               </Row>
               <Row>
-                <Col>Plate Type: {mockData.plate}</Col>
+                <Col>Plate Type: {data?.license_type}</Col>
               </Row>
               <Row>
-                <Col>Production Year: {mockData.year}</Col>
+                <Col>Production Year: {data?.production_year}</Col>
               </Row>
               <Row>
-                <Col>Status: {mockData.status}</Col>
+                <Col>Status: {data?.status}</Col>
               </Row>
             </Col>
             <Col span={11}>

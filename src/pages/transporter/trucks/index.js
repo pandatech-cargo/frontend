@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useEffect, useState, useMemo, useCallback } from 'react';
 import {
   Button,
   Col,
@@ -14,37 +14,30 @@ import { DownOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import { PdButton } from 'components';
-
-const mockData = [
-  {
-    id: 1,
-    license: 'D 1234 ABC',
-    truck: 'Container',
-    plate: 'Black',
-    year: '2021',
-    status: 'Active',
-  },
-  {
-    id: 2,
-    license: 'D 2342 CBE',
-    truck: 'Tronton',
-    plate: 'Yellow',
-    year: '2022',
-    status: 'Inactive',
-  },
-];
+import Transporter from 'api/transporter';
 
 const { Option } = Select;
 const { Search } = Input;
 
 export function TrucksTable() {
-  const [data] = useState(mockData);
+  const [data, setData] = useState([]);
 
-  function handleChange({ id, key }) {
+  async function dispatch() {
+    const { data } = await Transporter.getAllTrucks();
+    setData(data.data);
+  }
+
+  useEffect(() => {
+    dispatch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function handleChange({ id, key }) {
     if (key === 'detail') {
       // open detail modal
     } else {
-      console.log(`/trucks/${id}/${key}`);
+      await Transporter.updateTruckStatus(id, key);
+      dispatch();
     }
   }
 
@@ -66,7 +59,7 @@ export function TrucksTable() {
     const menu = (
       <Menu onClick={({ key }) => handleChange({ id, key })}>
         <Menu.Item key="detail">Change Detail</Menu.Item>
-        {status === 'Active' ? (
+        {status === 'active' ? (
           <Menu.Item key="deactivate">Deactivate Unit</Menu.Item>
         ) : (
           <Menu.Item key="activate">Activate Unit</Menu.Item>
@@ -81,34 +74,35 @@ export function TrucksTable() {
         </Button>
       </Dropdown>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = useMemo(
     () => [
       {
         title: 'License Number',
-        key: 'license',
+        key: 'license_number',
         sorter: true,
-        render: ({ id, license }) => (
-          <Link to={`/transporter/trucks/${id}`}>{license}</Link>
+        render: ({ id, license_number }) => (
+          <Link to={`/transporter/trucks/${id}`}>{license_number}</Link>
         ),
       },
       {
         title: 'Truck Type',
-        dataIndex: 'truck',
-        key: 'truck',
+        dataIndex: 'truck_type',
+        key: 'truck_type',
         sorter: true,
       },
       {
         title: 'Plate Type',
-        dataIndex: 'plate',
-        key: 'plate',
+        dataIndex: 'license_type',
+        key: 'license_type',
         sorter: true,
       },
       {
         title: 'Production Year',
-        dataIndex: 'year',
-        key: 'year',
+        dataIndex: 'production_year',
+        key: 'production_year',
         sorter: true,
       },
       {
