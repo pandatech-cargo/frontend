@@ -1,4 +1,7 @@
-export { AuthenticatedGuardRoute } from './guard/authenticated';
+export {
+  AuthenticatedGuardRoute,
+  TransporterGuardRoute,
+} from './guard/authenticated';
 export { HtmlRender } from './HtmlRender';
 export { NotAuthenticatedGuardRoute } from './guard/notAuthenticated';
 export { PdButton } from './PdButton';
