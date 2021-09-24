@@ -53,6 +53,7 @@ function App() {
             {nonAuthRoutesList.map((route, idx) => (
               <NotAuthenticatedGuardRoute key={idx} {...route} />
             ))}
+            <NotAuthenticatedGuardRoute path="/shipment" component={Shipment} />
             <AuthenticatedGuardRoute path="/" component={DashboardRoutes} />
           </Layout>
         </Switch>
