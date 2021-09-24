@@ -11,9 +11,9 @@ export default {
     return api.patch(`trucks/${id}/${action}`);
   },
   getAllDrivers() {
-    return api.get('trucks');
+    return api.get('drivers');
   },
   updateDriverStatus(id, action) {
-    return api.patch(`trucks/${id}/${action}`);
+    return api.patch(`drivers/${id}/${action}`);
   },
 };

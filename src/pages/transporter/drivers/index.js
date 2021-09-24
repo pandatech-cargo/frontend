@@ -12,7 +12,7 @@ export function DriversTable() {
   const [data, setData] = useState([]);
 
   async function dispatch() {
-    const { data } = await Transporter.getAllTrucks();
+    const { data } = await Transporter.getAllDrivers();
     setData(data.data);
   }
 
@@ -75,7 +75,7 @@ export function DriversTable() {
       },
       {
         title: 'Phone Number',
-        dataIndex: 'phone',
+        dataIndex: 'phone_number',
         key: 'phone',
         sorter: true,
       },
