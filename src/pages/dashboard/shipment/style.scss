@@ -1,0 +1,9 @@
+@import 'scss/variables/index';
+
+.pd-cms-shipment {
+  &-content {
+    margin: $spacing-lg;
+    padding: $spacing-lg;
+    background: $pd-color-white;
+  }
+}
