@@ -19,6 +19,24 @@ export function AuthenticatedGuardRoute(props) {
   );
 }
 
+export function TransporterGuardRoute(props) {
+  const { component: WrapperComponent, path, ...rest } = props;
+
+  return (
+    <Route
+      path={path}
+      {...rest}
+      render={(props) => {
+        return localStorage.getItem('role') === 'transporter' ? (
+          <WrapperComponent {...props} />
+        ) : (
+          <Redirect to="/login" />
+        );
+      }}
+    />
+  );
+}
+
 AuthenticatedGuardRoute.propTypes = {
   component: PropTypes.elementType.isRequired,
   path: PropTypes.string.isRequired,
