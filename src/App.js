@@ -4,7 +4,7 @@ import { Layout } from 'antd';
 
 import { MainProvider } from 'contexts';
 
-import { DragAndDrop, FormSubmission, Home, Login, Shipment } from 'pages';
+import { Home, Login, Shipment } from 'pages';
 
 import { TransporterRoute } from 'routes/transporter';
 
@@ -22,8 +22,6 @@ import 'App.scss';
 const authRoutesList = [
   { path: '/', component: Home, exact: true },
   { path: '/shipment', component: Shipment, exact: true },
-  { path: '/examples/form-submission', component: FormSubmission, exact: true },
-  { path: '/examples/dnd', component: DragAndDrop, exact: true },
 ];
 
 const nonAuthRoutesList = [{ path: '/login', component: Login, exact: true }];
@@ -41,9 +39,6 @@ function DashboardRoutes() {
     </Switch>
   );
 }
-
-// TODO: 404 page
-// TODO: ErrorBoundary
 
 function App() {
   return (

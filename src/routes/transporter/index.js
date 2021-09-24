@@ -6,7 +6,7 @@ import { TrucksTable } from 'pages/transporter/trucks';
 import { DriversTable } from 'pages/transporter/drivers';
 import { TruckDetail } from 'pages/transporter/trucks/detail';
 import { DriverDetail } from 'pages/transporter/drivers/detail';
-import { Shipment } from 'pages/dashboard/shipment';
+import { Shipment } from 'pages/transporter/shipment';
 
 export function TransporterRoute() {
   return (

@@ -8,6 +8,7 @@ import {
   Form,
   Input,
   Layout,
+  Modal,
   Menu,
   Row,
   Select,
@@ -16,7 +17,7 @@ import {
 } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 
-import { PdButton, PdFormModal, PdHeader } from 'components';
+import { PdButton, PdFormModal, PdHeader, PdNavbar } from 'components';
 
 import CityApi from 'api/city';
 import ShipmentApi from 'api/shipment';
@@ -179,6 +180,7 @@ export function Shipment() {
           </Title>
         }
       />
+      <PdNavbar />
       <Content className="pd-cms-shipment-content">
         {/* Filter Section */}
         <Row>
@@ -209,12 +211,13 @@ export function Shipment() {
 
       {/* Modal Shipment Section */}
       {showModalShipment && (
-        <PdFormModal
+        <Modal
+          form={shipmentForm}
           onCancel={handleCloseModal}
           onOk={shipmentForm.submit}
           open={showModalShipment}
           title="Add Shipment"
-          form={shipmentForm}>
+          visible={showModalShipment}>
           <Row type="flex" justify="center">
             <Form form={shipmentForm} onFinish={handleSubmitShipment}>
               <Form.Item
@@ -225,9 +228,9 @@ export function Shipment() {
                   { required: true, message: 'Please choose the origin' },
                 ]}>
                 <Select showSearch placeholder="Select origin">
-                  {cityList.map(({ id, value, title } = {}) => (
-                    <Option key={id} value={value}>
-                      {title}
+                  {cityList.map(({ id, name } = {}) => (
+                    <Option key={id} value={name}>
+                      {name}
                     </Option>
                   ))}
                 </Select>
@@ -240,9 +243,9 @@ export function Shipment() {
                 ]}
                 {...formItemLayout}>
                 <Select showSearch placeholder="Select destination">
-                  {cityList.map(({ id, value, title } = {}) => (
-                    <Option key={id} value={value}>
-                      {title}
+                  {cityList.map(({ id, name } = {}) => (
+                    <Option key={id} value={name}>
+                      {name}
                     </Option>
                   ))}
                 </Select>
@@ -258,12 +261,12 @@ export function Shipment() {
               </Form.Item>
             </Form>
           </Row>
-        </PdFormModal>
+        </Modal>
       )}
 
       {/* Modal Assign Section */}
       {showModalAssign && (
-        <PdFormModal
+        <Modal
           form={shipmentForm}
           onCancel={handleCloseModal}
           onOk={assignForm.submit}
@@ -281,7 +284,7 @@ export function Shipment() {
               </Form.Item>
             </Form>
           </Row>
-        </PdFormModal>
+        </Modal>
       )}
     </Layout>
   );
