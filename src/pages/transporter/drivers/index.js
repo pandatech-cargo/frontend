@@ -1,37 +1,32 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect } from 'react';
 import { Button, Col, Dropdown, Input, Menu, Row, Space, Table } from 'antd';
 import { DownOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 
 import { PdButton } from 'components';
-
-const mockData = [
-  {
-    id: 1,
-    name: 'Jack',
-    phone: '+6283929934',
-    create: '2 August 2021',
-    status: 'Active',
-  },
-  {
-    id: 2,
-    name: 'Zack',
-    phone: '+62839232423',
-    create: '10 August 2021',
-    status: 'Inactive',
-  },
-];
+import Transporter from 'api/transporter';
 
 const { Search } = Input;
 
 export function DriversTable() {
-  const [data] = useState(mockData);
+  const [data, setData] = useState([]);
 
-  function handleChange({ id, key }) {
+  async function dispatch() {
+    const { data } = await Transporter.getAllTrucks();
+    setData(data.data);
+  }
+
+  useEffect(() => {
+    dispatch();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function handleChange({ id, key }) {
     if (key === 'detail') {
       // open detail modal
     } else {
-      console.log(`/drivers/${id}/${key}`);
+      await Transporter.updateDriverStatus(id, key);
+      dispatch();
     }
   }
 
@@ -49,7 +44,7 @@ export function DriversTable() {
     const menu = (
       <Menu onClick={({ key }) => handleChange({ id, key })}>
         <Menu.Item key="detail">Change Detail</Menu.Item>
-        {status === 'Active' ? (
+        {status === 'active' ? (
           <Menu.Item key="deactivate">Deactivate Unit</Menu.Item>
         ) : (
           <Menu.Item key="activate">Activate Unit</Menu.Item>
@@ -64,6 +59,7 @@ export function DriversTable() {
         </Button>
       </Dropdown>
     );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = useMemo(
