@@ -1,0 +1,10 @@
+$pd-color-white: #ffffff;
+$pd-color-light-gray: #f2f5f7;
+$pd-color-gray: #cccccc;
+$pd-color-dark-gray: #777777;
+$pd-color-darker-gray: #444444;
+$pd-color-black: #222222;
+
+// color theme
+$primary-color: $pd-color-darker-gray;
+$secondary-color: lighten($primary-color, 20);

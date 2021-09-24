@@ -1,0 +1,16 @@
+@import 'scss/variables/index.scss';
+
+aside.pd-cms-sidebar {
+  background: $pd-color-white;
+  padding: 0 $spacing-lg;
+  text-transform: uppercase;
+
+  .ant-typography {
+    padding: 24px;
+  }
+
+  .ant-menu {
+    background: inherit;
+    border-right: none;
+  }
+}
